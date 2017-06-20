@@ -8,10 +8,11 @@ use Config;
 use File::Path qw/mkpath rmtree/;
 use File::Spec::Functions;
 
+my $base;
 END { rmtree($base) }
 
 {
-    my ($base, @tree, @inc);
+    my (@tree, @inc);
     BEGIN {
         @inc = @INC;
         $base = catdir('t', 'fallback');
