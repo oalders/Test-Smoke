@@ -8,15 +8,15 @@ language: perl
 perl:
   - blead
   - dev
-  - '5.30'
-  - '5.28'
-  - '5.26'
-  - '5.24'
-  - '5.22'
-  - '5.20'
-  - '5.18'
-  - '5.16'
-  - '5.14'
+  - "5.30"
+  - "5.28"
+  - "5.26"
+  - "5.24"
+  - "5.22"
+  - "5.20"
+  - "5.18"
+  - "5.16"
+  - "5.14"
 cache:
   directories:
     - $HOME/perl5
@@ -27,13 +27,20 @@ matrix:
   fast_finish: 1
   include:
     - env: COVERAGE=1
-      perl: '5.30'
+      perl: "5.30"
 env:
   global:
     - AUTHOR_TESTING=1
     - RELEASE_TESTING=1
 before_install:
-  - eval $(curl https://travis-perl.github.io/init) --auto --always-upgrade-modules
+  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+  - source ~/travis-perl-helpers/init
+  - build-perl
+install:
+  - curl -sL https://git.io/cpm | perl - install -g --show-build-log-on-failure CGI::Util File::Spec HTTP::Daemon HTTP::Lite HTTP::Message HTTP::Tiny JSON::XS Test::NoWarnings
+  - perl -MHTTP::Daemon -E 'say qq|$HTTP::Daemon::VERSION|;' && perl -v | head -2 | tail -1 && prove -V
+script:
+  - prove -lvb t/poster-post.t
 ### __app_cisetup__
 # ---
 # force_threaded_perls: 0
